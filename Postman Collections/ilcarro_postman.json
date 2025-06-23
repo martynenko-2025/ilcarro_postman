@@ -1,0 +1,601 @@
+{
+	"info": {
+		"_postman_id": "83a7f2ab-69b7-4905-a154-d80a2e3d0117",
+		"name": "ilcarro",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Positive",
+					"item": [
+						{
+							"name": "Login Registered User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e5560da3-01ed-4720-a9e7-830e48460267",
+										"exec": [
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"",
+											"});",
+											"pm.test(\"Content-Type is present\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"});",
+											"var jsonData = pm.response.json();",
+											"pm.environment.set(\"accessToken\", jsonData.accessToken);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "9ad6a56f-14a8-4e46-b77a-49e704dd20c2",
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "7f9339fa-48f6-4468-ae6c-8e35c9f71253",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"rus@gmail.com\",\n  \"password\": \"Password1!\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://ilcarro-backend.herokuapp.com/v1/user/login/usernamepassword"
+							},
+							"response": []
+						}
+					],
+					"id": "c8295165-c743-4eca-8768-6746e9c0638e"
+				},
+				{
+					"name": "Negative",
+					"item": [
+						{
+							"name": "Login Registered User wrong email(401)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e5560da3-01ed-4720-a9e7-830e48460267",
+										"exec": [
+											"",
+											"    pm.expect(pm.response.responseTime).to.be.below(700);",
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"pm.test(\"Content-Type is present\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"});",
+											"pm.test(\"Api message: 'Login or password incorrect\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.eql(\"Login or Password incorrect\");",
+											"});",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "9ad6a56f-14a8-4e46-b77a-49e704dd20c2",
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "c504f8e9-e77e-46e9-8fe1-4e6f0831ba1a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"rusgmail.com\",\n  \"password\": \"Password1!\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://ilcarro-backend.herokuapp.com/v1/user/login/usernamepassword"
+							},
+							"response": []
+						}
+					],
+					"id": "9a4cc935-e20c-4e02-8ff3-05d7093971e2"
+				}
+			],
+			"id": "2d576efb-18e3-4a1f-8f1e-38090b1bb713"
+		},
+		{
+			"name": "Car",
+			"item": [
+				{
+					"name": "Positive",
+					"item": [
+						{
+							"name": "Add Car",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "939713aa-d46b-45f2-927b-0ac6453b5907",
+										"exec": [
+											"pm.test(\"API message:'Car added successfully'\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.eql(\"Car added successfully\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "996d3718-bd9f-41c7-8001-46b92d58cacb",
+										"exec": [],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "cc21bc28-d455-4ebc-a07a-7d0dcd0ad29e",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"serialNumber\": \"{{$timestamp}}\",\n  \"manufacture\": \"string\",\n  \"model\": \"string\",\n  \"year\": \"string\",\n  \"fuel\": \"string\",\n  \"seats\": 0,\n  \"carClass\": \"string\",\n  \"pricePerDay\": 0,\n  \"about\": \"string\",\n  \"city\": \"Haifa\",\n  \"lat\": 0,\n  \"lng\": 0,\n  \"image\": \"string\",\n  \"owner\": \"string\",\n  \"bookedPeriods\": [\n    {\n      \"email\": \"string\",\n      \"startDate\": \"2025-06-20\",\n      \"endDate\": \"2025-06-20\"\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{BaseURI}}/v1/cars"
+							},
+							"response": []
+						},
+						{
+							"name": "Get User Cars",
+							"id": "e2f4128d-77cb-4c56-8dcb-964d4ab6302e",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": "{{BaseURI}}/v1/cars/my"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Car by serial number",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "17484ff3-f0b4-4d57-a254-1e79cd8ad5b8",
+										"exec": [
+											"pm.test(\"API message: 'Car deleted successfully'\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.eql(\"Car deleted successfully\");",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "be41aaea-2166-4ca9-aab6-ed631182359c",
+										"exec": [
+											"pm.sendRequest({",
+											"    url:\"https://ilcarro-backend.herokuapp.com/v1/cars/my\",",
+											"    header: {",
+											"        \"Authorization\": pm.environment.get(\"accessToken\")",
+											"    }",
+											"}, function(err,responseBody) {",
+											"var responseJson = responseBody.json();",
+											"var sNumber = [];",
+											"var list = (responseJson.cars).length;",
+											"for(var i=0; i<list; i++) {",
+											"    var counter = responseJson.cars[i];",
+											"    number = counter.serialNumber",
+											"    sNumber.push(number)",
+											"",
+											"}",
+											"",
+											"sNumber = JSON.stringify(sNumber).substring(2,12);",
+											"console.log(\"Serial number: \", sNumber);",
+											"pm.environment.set(\"serialNumber\",sNumber);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "29bbf190-f196-4a0e-8039-741055b58c04",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": "{{BaseURI}}/v1/cars/{{serialNumber}}"
+							},
+							"response": []
+						}
+					],
+					"id": "e07c09ea-0195-4b78-ab9b-db1205040889",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a6b6e273-fcb7-42a0-80b1-8c0958505819",
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "82415fe2-446f-41f1-b1c2-47eda6d7f5a1",
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Negative",
+					"item": [
+						{
+							"name": "Add Car without city",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "939713aa-d46b-45f2-927b-0ac6453b5907",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "996d3718-bd9f-41c7-8001-46b92d58cacb",
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "305c856c-7fd9-4b4c-ac19-9a64a5069c0b",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"serialNumber\": \"{{$timestamp}}\",\n  \"manufacture\": \"string\",\n  \"model\": \"string\",\n  \"year\": \"string\",\n  \"fuel\": \"string\",\n  \"seats\": 0,\n  \"carClass\": \"string\",\n  \"pricePerDay\": 0,\n  \"about\": \"string\",\n  \"city\": \"\",\n  \"lat\": 0,\n  \"lng\": 0,\n  \"image\": \"string\",\n  \"owner\": \"string\",\n  \"bookedPeriods\": [\n    {\n      \"email\": \"string\",\n      \"startDate\": \"2025-06-20\",\n      \"endDate\": \"2025-06-20\"\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{BaseURI}}/v1/cars"
+							},
+							"response": []
+						},
+						{
+							"name": "Add Car without number",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "939713aa-d46b-45f2-927b-0ac6453b5907",
+										"exec": [
+											"",
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "996d3718-bd9f-41c7-8001-46b92d58cacb",
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "f24ae4fe-43dd-4abb-9603-73cd05aeb377",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"serialNumber\": \"\",\n  \"manufacture\": \"string\",\n  \"model\": \"string\",\n  \"year\": \"string\",\n  \"fuel\": \"string\",\n  \"seats\": 0,\n  \"carClass\": \"string\",\n  \"pricePerDay\": 0,\n  \"about\": \"string\",\n  \"city\": \"Haifa\",\n  \"lat\": 0,\n  \"lng\": 0,\n  \"image\": \"string\",\n  \"owner\": \"string\",\n  \"bookedPeriods\": [\n    {\n      \"email\": \"string\",\n      \"startDate\": \"2025-06-20\",\n      \"endDate\": \"2025-06-20\"\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{BaseURI}}/v1/cars"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Car not found serial number",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "17484ff3-f0b4-4d57-a254-1e79cd8ad5b8",
+										"exec": [
+											"pm.test(\"API message: 'Car with serial number 175 not found'\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.eql(\"Car with serial number 175 not found\");",
+											"});",
+											"",
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "be41aaea-2166-4ca9-aab6-ed631182359c",
+										"exec": [
+											"pm.sendRequest({",
+											"    url:\"https://ilcarro-backend.herokuapp.com/v1/cars/my\",",
+											"    header: {",
+											"        \"Authorization\": pm.environment.get(\"accessToken\")",
+											"    }",
+											"}, function(err,responseBody) {",
+											"var responseJson = responseBody.json();",
+											"var sNumber = [];",
+											"var list = (responseJson.cars).length;",
+											"for(var i=0; i<list; i++) {",
+											"    var counter = responseJson.cars[i];",
+											"    number = counter.serialNumber",
+											"    sNumber.push(number)",
+											"",
+											"}",
+											"",
+											"sNumber = JSON.stringify(sNumber).substring(2,5);",
+											"console.log(\"Serial number: \", sNumber);",
+											"pm.environment.set(\"serialNumber\",sNumber);",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "b827f1b6-df79-4051-8b52-b18b9abbe38b",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": "{{BaseURI}}/v1/cars/175"
+							},
+							"response": []
+						},
+						{
+							"name": "Add Car without model",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "939713aa-d46b-45f2-927b-0ac6453b5907",
+										"exec": [
+											"pm.test(\"API message: { model: 'must not be blank' } \", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.eql({ model: 'must not be blank' });",
+											"});",
+											"",
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "996d3718-bd9f-41c7-8001-46b92d58cacb",
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"id": "5fc26ec1-b34d-4afd-8b69-925130e6905f",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"serialNumber\": \"{{$timestamp}}\",\n  \"manufacture\": \"string\",\n  \"model\": \"\",\n  \"year\": \"string\",\n  \"fuel\": \"string\",\n  \"seats\": 0,\n  \"carClass\": \"string\",\n  \"pricePerDay\": 0,\n  \"about\": \"string\",\n  \"city\": \"Haifa\",\n  \"lat\": 0,\n  \"lng\": 0,\n  \"image\": \"string\",\n  \"owner\": \"string\",\n  \"bookedPeriods\": [\n    {\n      \"email\": \"string\",\n      \"startDate\": \"2025-06-20\",\n      \"endDate\": \"2025-06-20\"\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{BaseURI}}/v1/cars"
+							},
+							"response": []
+						}
+					],
+					"id": "f020d863-8a6a-49ee-9cd3-12a520927883"
+				}
+			],
+			"id": "91de145a-d70d-4889-9a1f-7794e5a263f9"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "cb1a6b46-fc50-412d-a84b-74f9075127ba",
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "7be180a8-d3ac-4d77-9d42-048b58b1f8da",
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.test(\"Response time is less than 700ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(700);",
+					"});",
+					"",
+					"pm.test(\"Content-Type is present\", function () {",
+					"    pm.response.to.have.header(\"Content-Type\");",
+					"});",
+					"",
+					""
+				]
+			}
+		}
+	]
+}
